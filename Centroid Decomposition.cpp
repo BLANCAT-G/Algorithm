@@ -1,3 +1,4 @@
+//baekjoon 5820
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -11,7 +12,7 @@ using namespace std;
 
 int N,K,ans=INF;
 vector<pii> edge[200010];
-map<int,int> um;
+map<int,int> m;
 int visited[200010]={0};
 int tsize[200010];
 
@@ -34,7 +35,7 @@ int get_centroid(int x,int pre,int half){
 
 void cal(int x,int pre,int dist,int depth){
     if(dist>K) return;
-    if(um.find(K-dist)!=um.end()) ans=min(ans,um[K-dist]+depth);
+    if(m.find(K-dist)!=m.end()) ans=min(ans,m[K-dist]+depth);
     for(pii next:edge[x]){
         if(next.first==pre||visited[next.first]) continue;
         cal(next.first,x,dist+next.second,depth+1);
@@ -43,8 +44,8 @@ void cal(int x,int pre,int dist,int depth){
 
 void update(int x,int pre,int dist,int depth){
     if(dist>K) return;
-    if(um.find(dist)!=um.end()) um[dist]=min(um[dist],depth);
-    else um[dist]=depth;
+    if(m.find(dist)!=m.end()) m[dist]=min(m[dist],depth);
+    else m[dist]=depth;
     for(pii next:edge[x]){
         if(next.first==pre|| visited[next.first]) continue;
         update(next.first,x,dist+next.second,depth+1);
@@ -55,8 +56,8 @@ void solve(int cur){
     int sz=get_tsize(cur,-1);
     int cent=get_centroid(cur,-1,sz/2);
     visited[cent]=1;
-    um.clear();
-    um[0]=0;
+    m.clear();
+    m[0]=0;
     for(pii next:edge[cent]){
         if(visited[next.first]) continue;
         cal(next.first,cent,next.second,1);
